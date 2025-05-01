@@ -1,12 +1,12 @@
-import { NavLink } from 'react-router-dom';
-import AdminDashboard from '../pages/AdminDashboard';
-import ListeCandidats from '../pages/ListeCandidats';
+import { NavLink } from "react-router-dom";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import ListeCandidats from "../pages/admin/ListeCandidats";
 const Sidebar = () => {
   const liens = [
-    { nom: "Tableau de bord", path : "/AdminDashboard", icone: "📊" },
-    { nom: "Candidats", path : "/ListeCandidats" , icone: "👥" },
+    { nom: "Tableau de bord", path: "/AdminDashboard", icone: "📊" },
+    { nom: "Candidats", path: "/ListeCandidats", icone: "👥" },
     { nom: "Offres", path: "/gestionOffres", icone: "💼" },
-    { nom: "Candidatures", path: "/admin/candidatures", icone: "📄" },
+    { nom: "Candidatures", path: "/ListCandidatures", icone: "📄" },
     { nom: "Tests", path: "/gestionTest", icone: "🎓" },
     { nom: "Départements", path: "/admin/departements", icone: "🏢" },
     { nom: "Statistiques", path: "/admin/statistiques", icone: "📈" },
@@ -25,7 +25,9 @@ const Sidebar = () => {
               <NavLink
                 to={lien.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? "bg-gray-800" : ""}`
+                  `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                    isActive ? "bg-gray-800" : ""
+                  }`
                 }
               >
                 <span>{lien.icone}</span>

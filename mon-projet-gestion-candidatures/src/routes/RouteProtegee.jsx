@@ -1,8 +1,8 @@
-import { Navigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const RouteProtegee = ({ children, roleAttendu }) => {
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const { user, token } = useSelector((state) => state.auth);
 
   // Si aucun token ou rôle incorrect, redirige vers /connexion
   if (!token || !user || user.role !== roleAttendu) {

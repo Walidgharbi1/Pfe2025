@@ -4,18 +4,18 @@ const offreController = require('../controlleur/offreController');
 const verifyToken = require('../middlewares/verifyToken'); // Middleware JWT
 
 // Route pour créer une offre (protéger l'accès aux admins uniquement)
-router.post('/', verifyToken(['admin']), offreController.createOffre);
+router.post('/ajouterOffre', offreController.createOffre);
 
 // Route pour récupérer toutes les offres (publique ou protégée)
-router.get('/', offreController.getAllOffres);
+router.get('/offres', offreController.getAllOffres);
 
 // Route pour récupérer une offre par ID (publique ou protégée)
-router.get('/:id', offreController.getOffreById);
+router.get('/offre/:id', offreController.getOffreById);
 
 // Route pour modifier une offre (protéger l'accès aux admins uniquement)
-router.put('/:id', verifyToken(['admin']), offreController.updateOffre);
+router.put('/updateOffre/:id', offreController.updateOffre);
 
 // Route pour supprimer une offre (protéger l'accès aux admins uniquement)
-router.delete('/:id', verifyToken(['admin']), offreController.deleteOffre);
+router.delete('/supprimerOffre/:id',  offreController.deleteOffre);
 
 module.exports = router;

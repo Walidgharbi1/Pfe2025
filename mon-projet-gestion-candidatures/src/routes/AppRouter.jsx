@@ -1,32 +1,32 @@
-import { Routes, Route } from 'react-router-dom';
-import Accueil from '../pages/Accueil';
-import Connexion from '../pages/Connexion';
-import Inscription from '../pages/Inscription';
-import BarreNavigation from '../composants/BarreNavigation';
-import Footer from '../composants/Footer';
-import AdminDashboard from '../pages/AdminDashboard';
-import ListeCandidats from '../pages/ListeCandidats';
-import ListeChefs from '../pages/ListChefs';
-import OffreManagement from '../pages/OffreManagement';
-import TestManagement from '../pages/TestManagement';
-import ActualiteManagement from '../pages/ActualiteManagement';
-import OffreList from '../pages/OffreList';
-import CandidatDashboard from '../pages/CandidatDashboard';
-import ProfilCandiat from '../pages/ProfilCandidat';
-import CandidaturesCandidat from '../pages/CandidaturesCandidat';
-import StatistiquesCandidat from '../pages/StatistiquesCandidat';
-import ModifierProfil from '../pages/ModifierProfil';
-import RouteProtegee from './RouteProtegee';
-
+import { Routes, Route } from "react-router-dom";
+import Accueil from "../pages/Accueil";
+import Connexion from "../pages/Connexion";
+import Inscription from "../pages/Inscription";
+import BarreNavigation from "../composants/BarreNavigation";
+import Footer from "../composants/Footer";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import ListeCandidats from "../pages/admin/ListeCandidats";
+import ListeChefs from "../pages/admin/ListChefs";
+import OffreManagement from "../pages/admin/OffreManagement";
+import TestManagement from "../pages/admin/TestManagement";
+import ActualiteManagement from "../pages/admin/ActualiteManagement";
+import OffreList from "../pages/admin/OffreList";
+import CandidatDashboard from "../pages/CandidatDashboard";
+import ProfilCandiat from "../pages/ProfilCandidat";
+import StatistiquesCandidat from "../pages/StatistiquesCandidat";
+import ModifierProfil from "../pages/ModifierProfil";
+import RouteProtegee from "./RouteProtegee";
+import { ToastContainer } from "react-toastify";
+import ListCandidatures from "../pages/admin/CandidaturesCandidat";
 function AppRouter() {
   return (
     <>
+      <ToastContainer />
       <BarreNavigation />
       <Routes>
         <Route path="/" element={<Accueil />} />
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
-
         {/* 🔐 ADMIN uniquement */}
         <Route
           path="/AdminDashboard"
@@ -36,7 +36,6 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-
         <Route
           path="/ListeCandidats"
           element={
@@ -45,7 +44,15 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-
+        <Route
+          path="/ListCandidatures"
+          element={
+            <RouteProtegee roleAttendu="admin">
+              <ListCandidatures />
+            </RouteProtegee>
+          }
+        />
+        ListCandidatures
         <Route
           path="/ListeChefs"
           element={
@@ -54,7 +61,6 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-
         {/* 🔐 ADMIN uniquement : Gestion des offres */}
         <Route
           path="/gestionOffres"
@@ -64,16 +70,15 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-        <Route 
-        path ="/gestionTest"
-        element ={
-          <RouteProtegee roleAttendu= "admin">
-            <TestManagement />
-          </RouteProtegee>
-        }
+        <Route
+          path="/gestionTest"
+          element={
+            <RouteProtegee roleAttendu="admin">
+              <TestManagement />
+            </RouteProtegee>
+          }
         />
-      
-      <Route
+        <Route
           path="/gestionActualites"
           element={
             <RouteProtegee roleAttendu="admin">
@@ -81,15 +86,8 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-          <Route
-          path="/offres"
-          element={
-            
-              <OffreList />
-          
-          }
-        />
-       <Route
+        <Route path="/offres" element={<OffreList />} />
+        <Route
           path="/CandidatDashboard"
           element={
             <RouteProtegee roleAttendu="candidat">
@@ -99,11 +97,11 @@ function AppRouter() {
         >
           {/* Sous-routes pour CandidatDashboard */}
           <Route path="profil" element={<ProfilCandiat />} />
-          <Route path="candidatures" element={<CandidaturesCandidat />} />
+
           <Route path="statistiques" element={<StatistiquesCandidat />} />
         </Route>
-         {/* Modifier Profil du Candidat */}
-         <Route
+        {/* Modifier Profil du Candidat */}
+        <Route
           path="/modifierProfil"
           element={
             <RouteProtegee roleAttendu="candidat">
@@ -112,7 +110,7 @@ function AppRouter() {
           }
         />
       </Routes>
-      
+
       <Footer />
     </>
   );
