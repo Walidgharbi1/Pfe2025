@@ -5,8 +5,11 @@ const authRouter = require("./routes/authRoutes");
 const candidatsRouter = require("./routes/candidatRoute");
 const offresRouter = require("./routes/offreRoute");
 const candidatureRoutes = require("./routes/candidatureRoutes");
-
+const testsRoutes = require("./routes/testRoute");
+const reponseRoutes = require("./routes/reponseRoutes");
 const CvRouter = require("./routes/CvRoutes");
+const interviewRoutes = require("./routes/interviewRoutes.js");
+const newsRoutes = require("./routes/actualiteRoute.js");
 const app = express();
 const path = require("path");
 const { checkAdmin } = require("./scripts/ajouterAdmin");
@@ -27,6 +30,12 @@ app.use("/api/offres", offresRouter);
 app.use("/api/cvs", CvRouter);
 
 app.use("/api/candidatures", candidatureRoutes);
+app.use("/api/tests", testsRoutes);
+app.use("/api/reponses", reponseRoutes);
+app.use("/api/interviews", interviewRoutes);
+
+app.use("/api/actualites", newsRoutes);
+
 //  localhost:3000/api/candidats/getAllCandidats
 //localhost:3000/api/auth/login
 // localhost:3000/login

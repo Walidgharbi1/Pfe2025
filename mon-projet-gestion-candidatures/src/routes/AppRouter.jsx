@@ -18,6 +18,17 @@ import ModifierProfil from "../pages/ModifierProfil";
 import RouteProtegee from "./RouteProtegee";
 import { ToastContainer } from "react-toastify";
 import ListCandidatures from "../pages/admin/CandidaturesCandidat";
+import MesCandidatures from "../pages/candidat/MesCandidatures";
+import Agenda from "../pages/admin/Agenda";
+import CandidatAgenda from "../pages/candidat/CandidatAgenda";
+import ActualitesVisualization from "../pages/Actualites";
+import ChefRDashboard from "../pages/chef_Recrutement/ChefRDashboard";
+import ChefRListaCandidat from "../pages/chef_Recrutement/ChefRListeCandidats";
+import ChefROffreList from "../pages/chef_Recrutement/ChefROffreList";
+import ChefROffreManagement from "../pages/chef_Recrutement/ChefROffreManagement";
+import ChefRTestManagement from "../pages/chef_Recrutement/ChefRTestManagement";
+import ChefRAgenda from "../pages/chef_Recrutement/Agenda";
+import ChefRListCandidatures from "../pages/chef_Recrutement/ChefRCandidaturesCandidat";
 function AppRouter() {
   return (
     <>
@@ -27,6 +38,7 @@ function AppRouter() {
         <Route path="/" element={<Accueil />} />
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/inscription" element={<Inscription />} />
+        <Route path="/actualites" element={<ActualitesVisualization />} />
         {/* 🔐 ADMIN uniquement */}
         <Route
           path="/AdminDashboard"
@@ -52,7 +64,14 @@ function AppRouter() {
             </RouteProtegee>
           }
         />
-        ListCandidatures
+        <Route
+          path="/agenda"
+          element={
+            <RouteProtegee roleAttendu="admin">
+              <Agenda />
+            </RouteProtegee>
+          }
+        />
         <Route
           path="/ListeChefs"
           element={
@@ -94,18 +113,104 @@ function AppRouter() {
               <CandidatDashboard />
             </RouteProtegee>
           }
-        >
-          {/* Sous-routes pour CandidatDashboard */}
-          <Route path="profil" element={<ProfilCandiat />} />
+        />
+        <Route
+          path="/candidat_agenda"
+          element={
+            <RouteProtegee roleAttendu="candidat">
+              <CandidatAgenda />
+            </RouteProtegee>
+          }
+        />
 
-          <Route path="statistiques" element={<StatistiquesCandidat />} />
-        </Route>
+        <Route
+          path="/mes_candidatures"
+          element={
+            <RouteProtegee roleAttendu="candidat">
+              {/*  <CandiaatLayout>  <MesCandidatures /> </CandidaturesLayout> */}
+              <MesCandidatures />
+            </RouteProtegee>
+          }
+        ></Route>
+        {/* Sous-routes pour CandidatDashboard */}
+        <Route
+          path="profil"
+          element={
+            <RouteProtegee roleAttendu="candidat">
+              <ProfilCandiat />
+            </RouteProtegee>
+          }
+        />
+        <Route path="statistiques" element={<StatistiquesCandidat />} />
         {/* Modifier Profil du Candidat */}
         <Route
           path="/modifierProfil"
           element={
             <RouteProtegee roleAttendu="candidat">
               <ModifierProfil />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefr_dashboard"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefRDashboard />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefRListCandidat"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefRListaCandidat />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefROffreList"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefROffreList />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefROffreManagement"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefROffreManagement />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefRTestManagement"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefRTestManagement />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefRAgenda"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefRAgenda />
+            </RouteProtegee>
+          }
+        />
+
+        <Route
+          path="/chefRlisteCandidatures"
+          element={
+            <RouteProtegee roleAttendu={"chefR"}>
+              <ChefRListCandidatures />
             </RouteProtegee>
           }
         />

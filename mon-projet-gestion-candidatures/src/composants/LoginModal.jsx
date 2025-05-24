@@ -25,7 +25,7 @@ export default function LoginModal({ isOpen, onClose }) {
 
   return (
     isOpen && (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-100 to-white">
+      <div className="  h-[60vh] flex items-center justify-center bg-gradient-to-b from-blue-100 to-white">
         <div className="bg-white shadow-xl p-8 rounded-2xl w-full max-w-md">
           <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
             Connexion

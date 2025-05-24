@@ -11,9 +11,12 @@ router.post(
 );
 router.get("/getAllCandidatures", candidatureController.getAllCandidatures);
 router.get("/getCandidature/:id", candidatureController.getCandidatureById);
+router.get('/getCandidaturesByCandidatId/:id',candidatureController.getCandidaturesByCandidatId)
 router.delete(
   "/deleteCandidature/:id",
   candidatureController.deleteCandidature
 );
+
+router.put("/update_candidature/:id", candidatureController.updateCandidature);
 
 module.exports = router;

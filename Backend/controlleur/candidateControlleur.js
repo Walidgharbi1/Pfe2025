@@ -32,3 +32,12 @@ exports.supprimerCandidate = async (req, res) => {
     res.json({ error: err });
   }
 };
+
+exports.updateCandidate = async (req, res) => {
+  try {
+    await utilisateur.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ msg: "status du compte modifié avec success! " });
+  } catch (err) {
+    res.json({ error: err });
+  }
+};

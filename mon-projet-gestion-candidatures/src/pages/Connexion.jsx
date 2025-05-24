@@ -2,51 +2,59 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/slices/authSlice";
+import { loginUser, resetAuthMessages } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 export default function Connexion() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   // 🔁 Rediriger si déjà connecté
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (token && user) {
-      if (user.role === "admin") navigate("/AdminDashboard");
-      else if (user.role === "chef") navigate("/recruteurDashboard");
-      else navigate("/CandidatDashboard");
-    }
-  }, [navigate]);
-
-  // Obtenir le paramètre "redirect" de l'URL (si présent)
-  const redirectUrl = new URLSearchParams(location.search).get("redirect");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    try {
-      dispatch(loginUser({ email: email, mot_de_passe: password }));
-    } catch (err) {
-      console.error("Erreur de connexion :", err);
-      alert("Email ou mot de passe incorrect");
+    let newErrors = {};
+    if (!password.trim()) newErrors.password = "mot de passe est requis";
+    if (!email.trim()) {
+      newErrors.email = "L'email est requis";
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      newErrors.email = "L'email est invalide";
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        dispatch(loginUser({ email: email, mot_de_passe: password }));
+      } catch (err) {
+        console.error("Erreur de connexion :", err);
+        alert("Email ou mot de passe incorrect");
+      }
     }
   };
   const { user, msg, error } = useSelector((state) => state.auth);
   useEffect(() => {
     if (msg) {
       toast.success(msg);
+      dispatch(resetAuthMessages());
     }
     if (error) {
       toast.error(error);
+      dispatch(resetAuthMessages());
     }
+
     if (user) {
       if (user.role == "admin") {
         setTimeout(() => {
           navigate("/adminDashboard");
+        }, 2500);
+      } else if (user.role == "candidat") {
+        setTimeout(() => {
+          navigate("/CandidatDashboard");
+        }, 2500);
+      } else if (user.role == "chefR") {
+        setTimeout(() => {
+          navigate("/chefr_dashboard");
         }, 2500);
       }
     }
@@ -61,29 +69,38 @@ export default function Connexion() {
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Adresse e-mail
-            </label>
-            <input
-              type="email"
-              className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                <FaEnvelope className="inline mr-2" /> Adresse e-mail
+              </label>
+              <input
+                type="email"
+                className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            )}
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Mot de passe
-            </label>
-            <input
-              type="password"
-              className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                <FaLock className="inline mr-2" /> Mot de passe
+              </label>
+              <input
+                type="password"
+                className="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+            )}
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition"

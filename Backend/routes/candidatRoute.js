@@ -8,4 +8,5 @@ router.get("/getAllCandidats", candidatController.getAllCandidats);
 
 router.delete("/supprimerCandidate/:id", candidatController.supprimerCandidate);
 
+router.put("/updateCandidat/:id", candidatController.updateCandidate);
 module.exports = router;

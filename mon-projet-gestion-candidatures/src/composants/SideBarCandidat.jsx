@@ -1,4 +1,6 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
 const SidebarCandidat = () => {
   return (
@@ -7,11 +9,29 @@ const SidebarCandidat = () => {
       <nav>
         <ul className="space-y-3">
           {/* Lien vers le Profil du candidat */}
+
           <li>
             <NavLink
-              to="/CandidatDashboard/profil"
+              to="/CandidatDashboard"
               className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? 'bg-gray-800' : ''}`
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
+              }
+            >
+              <LuLayoutDashboard color="#4691A3" />
+              {/* Icône simple pour le profil */}
+              <span>Tableau de board</span>
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/profil"
+              className={({ isActive }) =>
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
               }
             >
               <span>👤</span> {/* Icône simple pour le profil */}
@@ -21,9 +41,11 @@ const SidebarCandidat = () => {
           {/* Lien vers les Candidatures du candidat */}
           <li>
             <NavLink
-              to="/CandidatDashboard/candidatures"
+              to="/mes_candidatures"
               className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? 'bg-gray-800' : ''}`
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
               }
             >
               <span>📄</span> {/* Icône simple pour les candidatures */}
@@ -33,13 +55,16 @@ const SidebarCandidat = () => {
           {/* Lien vers les Statistiques du candidat */}
           <li>
             <NavLink
-              to="/CandidatDashboard/statistiques"
+              to="/candidat_agenda"
               className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? 'bg-gray-800' : ''}`
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
               }
             >
-              <span>📊</span> {/* Icône simple pour les statistiques */}
-              <span>Statistiques</span>
+              <FaRegCalendarAlt color="#4691A3" />
+
+              <span>Agenda</span>
             </NavLink>
           </li>
           {/* Lien vers les Offres */}
@@ -47,7 +72,9 @@ const SidebarCandidat = () => {
             <NavLink
               to="/offres"
               className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? 'bg-gray-800' : ''}`
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
               }
             >
               <span>💼</span> {/* Icône simple pour les offres */}
@@ -59,7 +86,9 @@ const SidebarCandidat = () => {
             <NavLink
               to="/connexion"
               className={({ isActive }) =>
-                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${isActive ? 'bg-gray-800' : ''}`
+                `flex items-center gap-2 p-2 rounded hover:bg-gray-700 ${
+                  isActive ? "bg-gray-800" : ""
+                }`
               }
             >
               <span>🚪</span> {/* Icône simple pour la déconnexion */}

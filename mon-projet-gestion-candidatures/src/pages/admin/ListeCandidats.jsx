@@ -1,56 +1,97 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Sidebar from "../../composants/SideBar";
 import {
   fetchCandidats,
   supprimerCandidat,
+  toggleCandidatStatus,
 } from "../../services/AdminServices";
+import { toast } from "react-toastify";
 
 const ListeCandidats = () => {
   const [candidats, setCandidats] = useState([]);
   const [searchNom, setSearchNom] = useState("");
   const [editCandidat, setEditCandidat] = useState(null);
-
-  const chercherCandidat = async () => {
-    if (searchNom.trim() === "") return fetchCandidats();
-
+  const [loading, setLoading] = useState(true);
+  const loadCandidats = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/chercherParNom/${searchNom}`
-      );
-      setCandidats(res.data);
-    } catch (err) {
-      setCandidats([]);
-      console.error("Candidat non trouvé");
+      const data = await fetchCandidats();
+      setCandidats(data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Erreur lors du chargement des candidats");
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    loadCandidats();
+  }, []);
+
+  const handleDelete = async (id, status) => {
+    try {
+      if (status == "active") {
+        await toggleCandidatStatus(id, "inactive");
+      } else {
+        await toggleCandidatStatus(id, "active");
+      }
+      await loadCandidats();
+    } catch (error) {
+      toast.error("Erreur lors de la suppression");
     }
   };
 
-  useEffect(() => {
-    fetchCandidats().then((result) => {
-      setCandidats(result);
-    });
-  }, [candidats]);
+  const handleEdit = (candidat) => {
+    setEditCandidat({ ...candidat });
+  };
+
+  const handleSave = async () => {
+    try {
+      const updatedCandidat = await updateCandidat(
+        editCandidat._id,
+        editCandidat
+      );
+      setCandidats(
+        candidats.map((c) =>
+          c._id === updatedCandidat._id ? updatedCandidat : c
+        )
+      );
+      setEditCandidat(null);
+    } catch (error) {
+      toast.error("Erreur lors de la mise à jour");
+    }
+  };
+
+  const filteredCandidats = searchNom
+    ? candidats.filter((el) =>
+        el.nom.toLowerCase().includes(searchNom.toLowerCase())
+      )
+    : candidats;
+
+  if (loading) {
+    return (
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 p-6">
+          <h1 className="text-xl font-bold mb-4">Liste des Candidats</h1>
+          <p>Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-6 overflow-x-auto">
         <h1 className="text-xl font-bold mb-4">Liste des Candidats</h1>
 
-        <div className="mb-4">
+        <div className="mb-4 flex">
           <input
             type="text"
             placeholder="Chercher par nom"
             value={searchNom}
             onChange={(e) => setSearchNom(e.target.value)}
-            className="border rounded px-3 py-1"
+            className="border rounded px-3 py-1 flex-grow"
           />
-          <button
-            onClick={chercherCandidat}
-            className="ml-2 bg-blue-500 text-white px-4 py-1 rounded"
-          >
-            Chercher
-          </button>
         </div>
 
         <table className="w-full border">
@@ -62,16 +103,15 @@ const ListeCandidats = () => {
               <th className="p-2">Parcours academique</th>
               <th className="p-2">Expériences</th>
               <th className="p-2">Compétences</th>
+              <th className="p-2">status compte</th>
+
               <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {candidats
-              .filter((el) =>
-                el.nom.toLowerCase().includes(searchNom.toLocaleLowerCase())
-              )
-              .map((c) => (
-                <tr key={c._id} className="text-center border-t">
+            {filteredCandidats.length > 0 ? (
+              filteredCandidats.map((c) => (
+                <tr key={c._id} className="border-t hover:bg-gray-50">
                   <td className="p-2">
                     {editCandidat?._id === c._id ? (
                       <input
@@ -82,6 +122,7 @@ const ListeCandidats = () => {
                             nom: e.target.value,
                           })
                         }
+                        className="border rounded px-2 py-1 w-full"
                       />
                     ) : (
                       c.nom
@@ -98,6 +139,7 @@ const ListeCandidats = () => {
                             email: e.target.value,
                           })
                         }
+                        className="border rounded px-2 py-1 w-full"
                       />
                     ) : (
                       c.email
@@ -138,7 +180,7 @@ const ListeCandidats = () => {
                       <ul className="list-disc pl-4 text-sm">
                         {c.cv.skills.map((skill, index) => (
                           <li key={index}>
-                            <span className="font-semibold">{skill}</span>{" "}
+                            <span className="font-semibold">{skill}</span>
                           </li>
                         ))}
                       </ul>
@@ -146,18 +188,27 @@ const ListeCandidats = () => {
                       <span className="text-gray-400 italic">Aucune</span>
                     )}
                   </td>
+                  <td className="p-2 space-x-2">{c.status}</td>
                   <td className="p-2">
-                    <>
-                      <button
-                        onClick={() => supprimerCandidat(c._id)}
-                        className="text-red-600"
-                      >
-                        🗑️
-                      </button>
-                    </>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={c.status === "active"}
+                        onChange={() => handleDelete(c._id, c.status)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-red-500 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                    </label>
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="p-4 text-center text-gray-500">
+                  Aucun candidat trouvé
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

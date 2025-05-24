@@ -39,3 +39,16 @@ export const updateOffre = async (data) => {
     console.error("Erreur lors de la modification de l'offre", error);
   }
 };
+
+export const toggleOffreStatus = async (id, data) => {
+  try {
+    let result = await axios.put(
+      `http://localhost:3000/api/offres/updateOffre/${id}`,
+      data
+    );
+    toast.info("status offre modifié !");
+    return result.data;
+  } catch (error) {
+    console.error("Erreur lors de la modification de l'offre", error);
+  }
+};

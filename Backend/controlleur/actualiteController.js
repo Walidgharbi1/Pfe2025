@@ -1,16 +1,9 @@
-const Actualite = require('../models/Actualite');
+const Actualite = require("../models/Actualite");
 
 // Créer une nouvelle actualité
 exports.createActualite = async (req, res) => {
   try {
-    const { titre, description, contenu, dateExpiration } = req.body;
-
-    const newActualite = new Actualite({
-      titre,
-      description,
-      contenu,
-      dateExpiration,
-    });
+    const newActualite = new Actualite(req.body);
 
     await newActualite.save();
     res.status(201).json(newActualite);
@@ -34,7 +27,7 @@ exports.getActualiteById = async (req, res) => {
   try {
     const actualite = await Actualite.findById(req.params.id);
     if (!actualite) {
-      return res.status(404).json({ message: 'Actualité non trouvée' });
+      return res.status(404).json({ message: "Actualité non trouvée" });
     }
     res.status(200).json(actualite);
   } catch (err) {
@@ -45,9 +38,13 @@ exports.getActualiteById = async (req, res) => {
 // Modifier une actualité
 exports.updateActualite = async (req, res) => {
   try {
-    const actualite = await Actualite.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const actualite = await Actualite.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     if (!actualite) {
-      return res.status(404).json({ message: 'Actualité non trouvée' });
+      return res.status(404).json({ message: "Actualité non trouvée" });
     }
     res.status(200).json(actualite);
   } catch (err) {
@@ -60,9 +57,9 @@ exports.deleteActualite = async (req, res) => {
   try {
     const actualite = await Actualite.findByIdAndDelete(req.params.id);
     if (!actualite) {
-      return res.status(404).json({ message: 'Actualité non trouvée' });
+      return res.status(404).json({ message: "Actualité non trouvée" });
     }
-    res.status(200).json({ message: 'Actualité supprimée avec succès' });
+    res.status(200).json({ message: "Actualité supprimée avec succès" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

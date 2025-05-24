@@ -5,24 +5,12 @@ import { toast } from "react-toastify";
 import { getCandidatCV } from "../services/CvServices";
 import { handleCreateCandidature } from "../services/CandidatureServices";
 
-export default function CandidatureModal({ isOpen, onClose }) {
+export default function CandidatureModal({ isOpen, onClose, offre_id }) {
   const [newCv, setNewCv] = useState(null);
   const [newCvUrl, setNewCvUrl] = useState("");
-  const [login, setLogin] = useState({
-    email: "",
-    mot_de_passe: "",
-  });
 
   const [cvPath, setCvPath] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLogin((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
@@ -34,10 +22,12 @@ export default function CandidatureModal({ isOpen, onClose }) {
       formData.append("cv", newCv);
       formData.append("user_id", user._id);
       formData.append("cv_path", null);
+      formData.append("offre_id", offre_id);
     } else {
       formData.append("user_id", user._id);
       formData.append("cv_path", cvPath);
       formData.append("cv", null);
+      formData.append("offre_id", offre_id);
     }
     console.log("jgjsgdjkjaqgkjqsh");
     handleCreateCandidature(formData); // Save the offer (either create or update)

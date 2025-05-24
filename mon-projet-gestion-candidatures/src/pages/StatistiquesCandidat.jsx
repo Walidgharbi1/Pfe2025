@@ -1,11 +1,14 @@
+import SidebarCandidat from "../composants/SideBarCandidat";
+
 const StatistiquesCandidat = () => {
-    return (
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Statistiques</h3>
-        <p>Affiche ici des statistiques comme le nombre de candidatures envoyées, le taux de réussite, etc.</p>
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarCandidat />
+      <div className="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-2xl shadow-xl">
+        <h2 className="text-3xl font-bold text-blue-800 mb-6">Mon Profil</h2>
       </div>
-    );
-  };
-  
-  export default StatistiquesCandidat;
-  
+    </div>
+  );
+};
+
+export default StatistiquesCandidat;

@@ -1,93 +1,58 @@
-import { useState, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "../composants/Card";
+import ChartComponent from "../composants/ChartComponent";
+import PieChartGraph from "../composants/PieChart";
+import { getAllCandidatures } from "../services/CandidatureServices";
 import SidebarCandidat from "../composants/SideBarCandidat";
-import Footer from "../composants/Footer";
-import ProfilCandidat from "./ProfilCandidat"; // Import de la page Profil
-import StatistiquesCandidat from "./StatistiquesCandidat"; // Import de la page Statistiques
+import { fetchOffres } from "../services/OffreServices";
+import { fetchCandidats } from "../services/AdminServices";
+import { useSelector } from "react-redux";
 
-export default function CandidatDashboard() {
-  const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [offres, setOffres] = useState([]);
+export default function AdminDashboard() {
+  const [nbCandidatures, setNbCandidatures] = useState(0);
   const [candidatures, setCandidatures] = useState([]);
-
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    // Vérifier si l'utilisateur est connecté et récupérer les informations
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    } else {
-      navigate("/connexion"); // Redirige vers la page de connexion si aucun utilisateur n'est trouvé
-    }
-  }, [navigate]);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user) {
-      // Charger les offres disponibles
-      const fetchOffres = async () => {
-        try {
-          const response = await axios.get("http://localhost:3000/offres");
-          setOffres(response.data);
-        } catch (error) {
-          console.error("Erreur lors du chargement des offres", error);
-        }
-      };
+    const fetchData = async () => {
+      try {
+        const result = await getAllCandidatures();
+        const userCandidatures = result.filter(
+          (el) => el.user_id._id === user._id
+        );
+        setNbCandidatures(userCandidatures.length);
+        setCandidatures(userCandidatures);
+      } catch (error) {
+        console.error("Error fetching candidatures:", error);
+      }
+    };
 
-      // Charger les candidatures du candidat
-      const fetchCandidatures = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:3000/candidatures/${user._id}`
-          );
-          setCandidatures(response.data);
-        } catch (error) {
-          console.error("Erreur lors du chargement des candidatures", error);
-        }
-      };
-
-      fetchOffres();
-      fetchCandidatures();
-    }
-  }, [user]);
-
-  // Gérer la candidature d'une offre
-  const handlePostuler = async (offreId) => {
-    try {
-      await axios.post(`http://localhost:3000/candidatures`, {
-        candidatId: user._id,
-        offreId,
-      });
-      alert("Vous avez postulé à cette offre");
-    } catch (error) {
-      console.error("Erreur lors de la candidature", error);
-    }
-  };
+    fetchData();
+  }, [user._id]); // Added dependency
 
   return (
-    <>
-      <div className="flex min-h-screen">
-        {/* Sidebar à gauche */}
-        <SidebarCandidat />
+    <div className="flex">
+      <SidebarCandidat />
+      <div className="flex-1 p-6 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">
+          Tableau de bord
+        </h1>
 
-        {/* Contenu principal à droite */}
-        <div className="flex-1 p-6 bg-gray-100">
-          <h2 className="text-2xl font-bold mb-4">
-            Bienvenue, {user ? user.nom : "Candidat"}
-          </h2>
-
-          {/* Routes dynamiques */}
-          <Routes>
-            <Route path="profil" element={<ProfilCandidat user={user} />} />
-
-            <Route path="statistiques" element={<StatistiquesCandidat />} />
-          </Routes>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+          <Card className="bg-white shadow-md rounded-2xl p-4">
+            <CardContent>
+              <p className="text-gray-500">Candidatures</p>
+              <h2 className="text-2xl font-semibold">{nbCandidatures}</h2>
+            </CardContent>
+          </Card>
+          <div className="grid-col-4 md:grid-cols-3 gap-4 mb-10 bg-white shadow-md rounded-2xl p-6 mt-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-700">
+              Status des candidatures
+            </h2>
+            <PieChartGraph candidatures={candidatures} />
+          </div>
         </div>
       </div>
-
-      <Footer />
-    </>
+    </div>
   );
 }

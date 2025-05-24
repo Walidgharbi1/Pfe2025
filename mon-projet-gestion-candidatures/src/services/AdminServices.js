@@ -23,3 +23,20 @@ export const supprimerCandidat = async (id) => {
     console.error("Erreur lors de la suppression", err);
   }
 };
+
+export const toggleCandidatStatus = async (id, status) => {
+  try {
+    let res = await axios.put(base_url + `candidats/updateCandidat/${id}`, {
+      status: status,
+    });
+    toast.info(res.data.msg);
+    return res.data;
+  } catch (err) {
+    console.error("Erreur lors de la suppression", err);
+  }
+};
+
+export const fetchUsers = async () => {
+  let data = await axios.get(base_url + "auth/get_all_users");
+  return data.data;
+};

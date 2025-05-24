@@ -28,6 +28,11 @@ const utilisateurSchema = new mongoose.Schema({
     default: "candidat",
     enum: ["admin", "chefR", "candidat"],
   },
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
+  },
 });
 
 let utilisateur = mongoose.model("utilisateur", utilisateurSchema);

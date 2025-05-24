@@ -4,7 +4,7 @@ const actualiteController = require('../controlleur/actualiteController');
 const verifyToken = require('../middlewares/verifyToken'); // Middleware pour vérifier le token
 
 // Route pour créer une actualité (protéger l'accès aux admins uniquement)
-router.post('/', verifyToken(['admin']), actualiteController.createActualite);
+router.post('/',  actualiteController.createActualite);
 
 // Route pour récupérer toutes les actualités (publique)
 router.get('/', actualiteController.getAllActualites);
@@ -13,9 +13,9 @@ router.get('/', actualiteController.getAllActualites);
 router.get('/:id', actualiteController.getActualiteById);
 
 // Route pour modifier une actualité (protéger l'accès aux admins uniquement)
-router.put('/:id', verifyToken(['admin']), actualiteController.updateActualite);
+router.put('/:id',  actualiteController.updateActualite);
 
 // Route pour supprimer une actualité (protéger l'accès aux admins uniquement)
-router.delete('/:id', verifyToken(['admin']), actualiteController.deleteActualite);
+router.delete('/:id',  actualiteController.deleteActualite);
 
 module.exports = router;

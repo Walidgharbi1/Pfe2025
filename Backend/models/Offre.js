@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const offreSchema = new mongoose.Schema({
   titre: { type: String, required: true },
@@ -6,9 +6,14 @@ const offreSchema = new mongoose.Schema({
   datePublication: { type: Date, default: Date.now },
   dateExpiration: { type: Date, required: true },
   specialite: { type: String, required: true }, // Spécialité de l'offre, ex: "Backend", "Frontend"
-  salaire: { type: Number, required: true },  // Salaire proposé
-  statut: { type: String, enum: ['ouvert', 'fermé'], default: 'ouvert' }, // Statut de l'offre
-  type: { type: String, enum: ['stage', 'emploi'], required: true } // Type de l'offre : stage ou emploi
+  salaire: { type: Number, required: true }, // Salaire proposé
+  statut: { type: String, enum: ["ouvert", "fermé"], default: "ouvert" }, // Statut de l'offre
+  type: { type: String, enum: ["stage", "emploi"], required: true }, // Type de l'offre : stage ou emploi
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
+  },
 });
 
-module.exports = mongoose.model('Offre', offreSchema);
+module.exports = mongoose.model("Offre", offreSchema);
